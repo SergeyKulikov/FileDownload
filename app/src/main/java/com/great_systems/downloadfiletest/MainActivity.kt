@@ -37,65 +37,11 @@ class MainActivity : AppCompatActivity() {
         // Start download in a background thread to avoid blocking the main thread
         Thread {
             try {
-                downloadFile("http://gsys.ru/test.exe", "test.exe")
+                downloadFile("http://gsys.ru/test.zip", "downloaded_test.zip")
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }.start()
-    }
-
-    fun download(link: String, path: String, progress: ((Long, Long) -> Unit)? = null): Long {
-        val url = URL(link)
-        val connection = url.openConnection()
-        connection.connect()
-        val length = connection.contentLengthLong
-        url.openStream().use { input ->
-            FileOutputStream(File(path)).use { output ->
-                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                var bytesRead = input.read(buffer)
-                var bytesCopied = 0L
-                while (bytesRead >= 0) {
-                    output.write(buffer, 0, bytesRead)
-                    bytesCopied += bytesRead
-                    progress?.invoke(bytesCopied, length)
-                    bytesRead = input.read(buffer)
-                }
-                return bytesCopied
-            }
-        }
-    }
-
-
-    fun DownloadFiles() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val u = URL("http://gsys.ru/test.zip")
-            val inpStream: InputStream = u.openStream()
-            val dis = DataInputStream(inpStream)
-            val buffer = ByteArray(1024)
-            var length: Int
-            val fileToSave = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).path + "/test.kml"
-
-            val outFile = File(fileToSave)
-            if (!outFile.exists()) {
-               val rez = outFile.mkdirs()
-                Log.d("dlk", rez.toString())
-                // val answ = Files.createFile(outFile.toPath())
-            }
-
-            val fos = FileOutputStream(outFile)
-            while (dis.read(buffer).also { length = it } > 0) {
-                fos.write(buffer, 0, length)
-            }
-
-
-
-        } catch (mue: MalformedURLException) {
-            Log.e("SYNC getUpdate", "malformed url error", mue)
-        } catch (ioe: IOException) {
-            Log.e("SYNC getUpdate", "io error", ioe)
-        } catch (se: SecurityException) {
-            Log.e("SYNC getUpdate", "security error", se)
-        }
     }
 
     private fun downloadFile(fileUrl: String, fileName: String) {
