@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     fun DownloadFiles() = CoroutineScope(Dispatchers.IO).launch {
         try {
-            val u = URL("http://gsys.ru/test.exe")
+            val u = URL("http://gsys.ru/test.zip")
             val inpStream: InputStream = u.openStream()
             val dis = DataInputStream(inpStream)
             val buffer = ByteArray(1024)
