@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         val inputStream: InputStream = connection.inputStream
         val outputStream: OutputStream = FileOutputStream(filePath)
 
-        val buffer = ByteArray(4096) // Buffer size for reading
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE) // Buffer size for reading
         var bytesRead: Int
 
         // Read data from InputStream into buffer and write it to OutputStream
